@@ -1,0 +1,21 @@
+Login to the database and run/execute below statements
+1) /* To create employees and departments */
+    Table_creation.sql 
+2) /* To Populate the Departments and Employees tables */
+	insert_statments.sql
+3) /*Procedure to allow an Employee to be created */
+	PROC_CREATE_NEW_EMPLOYEE.sql
+4) /*Procedure to allow the Salary for an Employee to be increased or decreased by a percentage */
+	PROC_SALARY_INC_DEC.sql
+5) /*Procedure to allow the transfer of an Employee to a different Department */
+	PROC_DEPARTMENT_TRANSFER.sql
+6) /* Function  to return the Salary for an Employee */
+	FUN_SALARY_RETURN.sql
+7) /* sql statements/shell script -->A report to show all Employees for a Department */
+	
+	A report to show all Employees for a Department
+	
+8) /* sql statements/shell script --> A report to show the total of Employee Salary for a Department */
+	
+	A report to show the total of Employee Salary for a Department
+

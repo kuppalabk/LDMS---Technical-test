@@ -1,0 +1,63 @@
+5 Create an appropriate executable database object to allow the transfer of an
+Employee to a different Department
+
+CREATE  OR REPLACE PROCEDURE PROC_DEPARTMENT_TRANSFER 
+(
+	p_employee_id employees.employee_Id%type,
+	p_new_department_id employees.department_id%type
+) 
+
+AS
+PRAGMA AUTONOMOUS_TRANSACTION;   
+ /******************************************************************************
+  PROCEDURE		:   PROC_DEPARTMENT_TRANSFER
+  DESCRIPTION	: 	To the transfer of an Employee to a different Department
+  PROJECT_NAME	:   NA
+  ******************************************************************************
+  VER#    AUTHOR           DATE                 	DESCRIPTION
+  1.0     BALA       	04/06/2021                 INITIAL VERSION
+  ******************************************************************************/
+v_new_department_Id departments.department_Id%type;
+v_current_department_Id employees.department_Id%type;
+BEGIN
+	
+	BEGIN
+	
+		SELECT department_Id into v_new_department_Id FROM departments where department_id=p_new_department_id;	
+    EXCEPTION
+	WHEN OTHERS THEN
+		/* Here  TRACE  is a package and INSERT_MESSAGE procedure to insert error records to trace 
+		TRACE.INSERT_MESSAGE(p_new_department_id,'PROC_DEPARTMENT_TRANSFER',SQLCODE || ':' || SQLERRM); */
+		raise_application_error(-20010,'No department exists for  : '|| p_new_department_id ||SQLCODE||' -ERROR- '||SQLERRM);
+	END;
+	
+	BEGIN
+		SELECT department_Id into v_current_department_Id FROM employees where employee_Id=p_employee_id;	
+    EXCEPTION
+	WHEN OTHERS THEN
+		/* Here  TRACE  is a package and INSERT_MESSAGE procedure to insert error records to trace 
+		TRACE.INSERT_MESSAGE(p_employee_id,'PROC_DEPARTMENT_TRANSFER',SQLCODE || ':' || SQLERRM); */
+		raise_application_error(-20010,'No employee match for the given employee_Id : '|| p_employee_id ||SQLCODE||' -ERROR- '||SQLERRM);
+	END;
+	
+    BEGIN
+        UPDATE EMPLOYEES SET department_id = p_new_department_id 
+        where employee_Id=p_employee_id
+        and department_Id=v_current_department_Id;
+        commit;
+    EXCEPTION
+	WHEN OTHERS THEN
+		/* Here  TRACE  is a package and INSERT_MESSAGE procedure to insert error records to trace 
+		TRACE.INSERT_MESSAGE(p_employee_id,'PROC_DEPARTMENT_TRANSFER',SQLCODE || ':' || SQLERRM); */
+		raise_application_error(-20011,p_employee_id ||SQLCODE||' -ERROR- '||SQLERRM);
+	END;
+    
+    
+EXCEPTION
+
+  WHEN OTHERS THEN
+  /* Here  TRACE  is a package and INSERT_MESSAGE procedure to insert error records to trace 
+  TRACE.INSERT_MESSAGE(p_new_department_id,'PROC_DEPARTMENT_TRANSFER',SQLCODE || ':' || SQLERRM); */
+  raise_application_error(-20001,'An error was encountered - '||SQLCODE||' -ERROR- '||SQLERRM);
+
+END;

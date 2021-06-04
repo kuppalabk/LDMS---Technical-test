@@ -1,0 +1,58 @@
+
+/* 8. Write a report to show the total of Employee Salary for a Department */
+
+#### for all departments ####
+
+select department_id,sum(salary) from EMPLOYEES  group by DEPARTMENT_ID
+
+#### for single department ####
+
+select  sum(salary) from EMPLOYEES where DEPARTMENT_ID=&&DEPARTMENT_ID
+
+
+(or)
+ 
+
+shell script
+
+
+shell script :
+NAME : TOTAL_SALARY_DEPARTMENT.SH
+
+ #! /user/bin/sh
+
+  /******************************************************************************
+  SCHELLSCRIPT	:   TOTAL_SALARY_DEPARTMENT
+  DESCRIPTION	: 	to show the total of Employee Salary for a Department
+  PROJECT_NAME	:   NA
+  ******************************************************************************
+  VER#    AUTHOR           DATE                 	DESCRIPTION
+  1.0     BALA       	04/06/2021                 INITIAL VERSION
+  ******************************************************************************/
+
+. /etc/profile
+. /interact/.bash_profile
+
+sqlplus -s  USERNAME/PASSWORD@DBNAME <<EOF >/home/data/total_salary_department.txt
+set pages 9999 lines 199 feedback off verify off heading off echo off
+alter session set nls_territory="UNITED KINGDOM";
+alter session set nls_language=ENGLISH;
+alter session set nls_date_format = 'dd.mm.yyyy';
+WHENEVER SQLERROR EXIT 1
+
+select  sum(salary) from EMPLOYEES where DEPARTMENT_ID=&&DEPARTMENT_ID
+
+exit;
+EOF
+
+if
+        [ -s /home/data/total_salary_department.txt ]
+then
+chmod 777 /home/data/total_salary_department.txt
+
+cat /home/data/total_salary_department.txt | mail -s " The total of Employee Salary for a Department " balakrishna@gmail.com
+
+
+rm -f /home/data/total_salary_department.txt
+
+fi

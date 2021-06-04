@@ -1,0 +1,28 @@
+
+====department Data insertion ==
+
+insert into departments (department_Id,department_Name,location) values (1,'Management','London');
+insert into departments (department_Id,department_Name,location) values (2,'Engineering','Cardiff');
+insert into departments (department_Id,department_Name,location) values (3,'Research '||'&'||' Development','Edinburgh');
+insert into departments (department_Id,department_Name,location) values (4,'Sales','Belfast');
+
+commit;
+
+
+
+====employees Data insertion ==
+
+insert into employees (employee_id,employee_name,job_title,manager_id,date_hired,salary,department_id) values (90001,'John Smith','CEO','',to_date('01/01/95','dd/mm/yyyy'),100000,1);
+insert into employees (employee_id,employee_name,job_title,manager_id,date_hired,salary,department_id) values (90002,'Jimmy Willis','Manager',90001,to_date('23/09/03','dd/mm/yyyy'),52500,4);
+insert into employees (employee_id,employee_name,job_title,manager_id,date_hired,salary,department_id) values (90003,'Roxy Jones','Salesperson','',to_date('11/02/17','dd/mm/yyyy'),35000,4);
+insert into employees (employee_id,employee_name,job_title,manager_id,date_hired,salary,department_id) values (90004,'Selwyn Field','Salesperson','',to_date('20/05/15','dd/mm/yyyy'),32000,4);
+insert into employees (employee_id,employee_name,job_title,manager_id,date_hired,salary,department_id) values (90005,'David Hallett','Engineer',90006,to_date('17/04/18','dd/mm/yyyy'),40000,2);
+insert into employees (employee_id,employee_name,job_title,manager_id,date_hired,salary,department_id) values (90006,'Sarah Phelps','Manager',90001,to_date('21/03/15','dd/mm/yyyy'),45000,2);
+insert into employees (employee_id,employee_name,job_title,manager_id,date_hired,salary,department_id) values (90007,'Louise Harper','Engineer',90006,to_date('01/01/13','dd/mm/yyyy'),47000,2);
+insert into employees (employee_id,employee_name,job_title,manager_id,date_hired,salary,department_id) values (90008,'Tina Hart','Engineer',90009,to_date('28/07/14','dd/mm/yyyy'),45000,3);
+insert into employees (employee_id,employee_name,job_title,manager_id,date_hired,salary,department_id) values (90009,'Gus Jones','Manager',90001,to_date('15/05/18','dd/mm/yyyy'),50000,3);
+insert into employees (employee_id,employee_name,job_title,manager_id,date_hired,salary,department_id) values (90010,'Mildred Hall','Secretary',90001,to_date('12/10/96','dd/mm/yyyy'),35000,1);
+
+commit;
+
+

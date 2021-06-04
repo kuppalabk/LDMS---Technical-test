@@ -1,0 +1,23 @@
+=== Departments table creation ==
+
+create table departments (
+department_Id number(5),
+department_Name varchar2(50) NOT NULL,
+location varchar2 (50) NOT NULL,
+CONSTRAINT pk_depart_id PRIMARY KEY(department_Id)
+);
+
+
+===== Employees table creation =======
+
+Create table employees (
+employee_id number(10),
+employee_name varchar2(50)NOT NULL,
+job_title varchar2(50) NOT NULL,
+manager_id number(10),
+date_hired date NOT NULL,
+salary number(10) NOT NULL,
+department_id number(5),
+CONSTRAINT pk_emp_id PRIMARY KEY(employee_Id),
+CONSTRAINT fk_dept_id FOREIGN KEY(department_id) REFERENCES departments(department_id)
+);

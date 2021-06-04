@@ -1,0 +1,47 @@
+
+/* 7. Write a report to show all Employees for a Department */
+
+SELECT * FROM EMPLOYEES WHERE department_Id=&&department_Id
+
+or 
+
+shell script :
+
+
+ #! /user/bin/sh
+
+  /******************************************************************************
+  SCHELLSCRIPT	:   ALL_EMPLOYEES_DEPARTMENT
+  DESCRIPTION	: 	To show all Employees for a Department
+  PROJECT_NAME	:   NA
+  ******************************************************************************
+  VER#    AUTHOR           DATE                 	DESCRIPTION
+  1.0     BALA       	04/06/2021                 INITIAL VERSION
+  ******************************************************************************/
+
+. /etc/profile
+. /interact/.bash_profile
+
+sqlplus -s  USERNAME/PASSWORD@DBNAME <<EOF >/home/data/all_employee_details.txt
+set pages 9999 lines 199 feedback off verify off heading off echo off
+alter session set nls_territory="UNITED KINGDOM";
+alter session set nls_language=ENGLISH;
+alter session set nls_date_format = 'dd.mm.yyyy';
+WHENEVER SQLERROR EXIT 1
+
+SELECT * FROM EMPLOYEES WHERE department_Id=&&department_Id;
+
+exit;
+EOF
+
+if
+        [ -s /home/data/all_employee_details.txt ]
+then
+chmod 777 /home/data/all_employee_details.txt
+
+cat /home/data/all_employee_details.txt | mail -s " Weekly provisioning Status report " balakrishna@gmail.com
+
+
+rm -f /home/data/all_employee_details.txt
+
+fi

@@ -1,0 +1,40 @@
+
+/* 6. Create an appropriate executable database object to return the Salary for an
+Employee. */
+
+
+CREATE  OR REPLACE FUNCTION FUN_SALARY_RETURN 
+(
+	p_employee_id employees.employee_Id%type
+) 
+RETURN NUMBER
+AS
+PRAGMA AUTONOMOUS_TRANSACTION;   
+ /******************************************************************************
+  FUNCTION		:   FUN_SALARY_RETURN
+  DESCRIPTION	: 	To the transfer of an Employee to a different Department
+  PROJECT_NAME	:   NA
+  ******************************************************************************
+  VER#    AUTHOR           DATE                 	DESCRIPTION
+  1.0     BALA       	04/06/2021                 INITIAL VERSION
+  ******************************************************************************/
+v_salary employees.salary%type;
+BEGIN	
+	BEGIN
+		SELECT salary into v_salary FROM employees where employee_Id=p_employee_id;	
+    EXCEPTION
+	WHEN OTHERS THEN
+		/* Here  TRACE  is a package and INSERT_MESSAGE procedure to insert error records to trace 
+		TRACE.INSERT_MESSAGE(p_employee_id,'FUN_SALARY_RETURN',SQLCODE || ':' || SQLERRM); */
+		raise_application_error(-20010,'No employee match for the given employee_Id : '|| p_employee_id ||SQLCODE||' -ERROR- '||SQLERRM);
+	END;
+	RETURN v_salary;
+    
+EXCEPTION
+
+  WHEN OTHERS THEN
+  /* Here  TRACE  is a package and INSERT_MESSAGE procedure to insert error records to trace 
+  TRACE.INSERT_MESSAGE(p_new_department_id,'FUN_SALARY_RETURN',SQLCODE || ':' || SQLERRM); */
+  raise_application_error(-20001,'An error was encountered - '||SQLCODE||' -ERROR- '||SQLERRM);
+
+END;

@@ -1,0 +1,49 @@
+CREATE SEQUENCE employees_seq
+  MINVALUE 1
+  MAXVALUE 100000
+  START WITH 1
+  INCREMENT BY 1
+  CACHE 20;
+
+/* procedure to allow an Employee to be created */
+
+CREATE  OR REPLACE PROCEDURE PROC_CREATE_NEW_EMPLOYEE 
+(
+	p_employee_id employees.employee_Id%type,
+	p_employee_name employees.employee_name%type,
+	p_job_title employees.job_title%type,
+	p_manager_id employees.manager_id%type,
+	p_date_hired employees.date_hired%type,
+	p_salary employee.salary%type, 
+	p_department_id employees.department_id%type
+) 
+
+AS
+
+PRAGMA AUTONOMOUS_TRANSACTION;
+  
+   
+ /******************************************************************************
+  PROCEDURE		:   PROC_CREATE_NEW_EMPLOYEE
+  DESCRIPTION	: 	To allow an Employee to be created
+  PROJECT_NAME	:   NA
+  ******************************************************************************
+  VER#     AUTHOR           DATE                 DESCRIPTION
+  1.0     BALA       04/06/2021                 INITIAL VERSION
+  ******************************************************************************/
+
+BEGIN
+	
+	INSERT INTO employees (employee_id,employee_name,job_title,manager_id,date_hired,salary,department_id) values
+	(employees_seq.NEXTVAL,p_employee_name,p_job_title,p_manager_id,p_date_hired,p_salary,p_department_id);
+	
+	commit;
+
+EXCEPTION
+
+  WHEN NO_DATA_FOUND THEN
+  /* Here  TRACE  is a package and INSERT_MESSAGE procedure to insert error records to trace 
+  TRACE.INSERT_MESSAGE(p_employee_id,'PROC_CREATE_NEW_EMPLOYEE',SQLCODE || ':' || SQLERRM); */
+  raise_application_error(-20001,'An error was encountered - '||SQLCODE||' -ERROR- '||SQLERRM);
+
+END;

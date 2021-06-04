@@ -1,0 +1,70 @@
+
+/* 4. Create an appropriate executable database object to allow the Salary for an
+Employee to be increased or decreased by a percentage */
+ 
+CREATE  OR REPLACE PROCEDURE PROC_SALARY_INC_DEC 
+(
+	p_employee_id IN NUMBER,
+	p_percentage IN NUMBER,
+	p_percentage_type varchar2
+	
+) 
+AS
+ PRAGMA AUTONOMOUS_TRANSACTION;
+    
+   
+ /************************************************************************************************
+  PROCEDURE		: 	PROC_SALARY_INC_DEC
+  DESCRIPTION	: 	To allow the Salary for anEmployee to be increased or decreased by a percentage
+  PROJECT_NAME	: 	NA
+  ************************************************************************************************
+  VER#     AUTHOR           DATE                 DESCRIPTION
+  1.0     BALA       04/06/2021                 INITIAL VERSION
+  ******************************************************************************************/
+  
+  Results   VARCHAR2(50);
+  v_salary employees.salary%type;
+  v_salary_decreased employees.salary%type;
+  v_salary_increased employees.salary%type;
+
+BEGIN
+	
+	BEGIN
+		SELECT salary into v_salary FROM employees where employee_Id=p_employee_id;	
+    EXCEPTION
+	WHEN OTHERS THEN
+		/* Here  TRACE  is a package and INSERT_MESSAGE procedure to insert error records to trace 
+		TRACE.INSERT_MESSAGE(p_employee_id,'PROC_SALARY_INC_DEC',SQLCODE || ':' || SQLERRM); */
+		raise_application_error(-20010,'No employee match for the given employee_Id : '|| p_employee_id ||SQLCODE||' -ERROR- '||SQLERRM);
+	END;
+	
+
+    IF upper(p_percentage_type)='INCREASED' then 
+	
+		v_salary_increased:=v_salary*p_percentage/100;
+	
+        UPDATE employees
+        SET salary = salary + v_salary_increased
+        WHERE employee_id = p_employee_id;
+        DBMS_OUTPUT.PUT_LINE('Employee : ' || p_employee_id || 'Salary has been increased to : ' ||v_salary_increased  );
+		
+    ELSE
+		v_salary_decreased:=v_salary*p_percentage/100;
+		
+        UPDATE employees
+        SET salary = salary - v_salary_decreased
+        WHERE employee_id = p_employee_id;
+        DBMS_OUTPUT.PUT_LINE('Employee : ' || p_employee_id || 'Salary has been decreased  to : ' ||v_salary_decreased  );
+
+    END IF;
+
+    COMMIT;
+
+EXCEPTION
+
+  WHEN NO_DATA_FOUND THEN
+  /* Here  TRACE  is a package and INSERT_MESSAGE procedure to insert error records to trace 
+  TRACE.INSERT_MESSAGE(p_employee_id,'PROC_SALARY_INC_DEC',SQLCODE || ':' || SQLERRM); */
+  raise_application_error(-20001,'An error was encountered - '||SQLCODE||' -ERROR- '||SQLERRM);
+  
+END;
